@@ -1,45 +1,45 @@
-public class HadoopPatents extends Configured implements Tool {
-	public static class MapClass extends MapReduceBase
-	implements Mapper<Text, Text, Text, Text> {
-		public void map(Text key, Text value,
-		OutputCollector<Text, Text> output,
-		Reporter reporter) throws IOException {
-			output.collect(value, key);
-		}
-	}
-	public static class Reduce extends MapReduceBase
-	implements Reducer<Text, Text, Text, Text> {
-		public void reduce(Text key, Iterator<Text> values,
-		OutputCollector<Text, Text> output,
-		Reporter reporter) throws IOException {
-			String csv = "";
-			while (values.hasNext()) {
-				if (csv.length() > 0) csv += ",";
-					csv += values.next().toString();
-			}
-			output.collect(key, new Text(csv));
-		}
-	}
-	public int run(String[] args) throws Exception {
-		Configuration conf = getConf();
-		JobConf job = new JobConf(conf, HadoopPatents.class);
-		Path in = new Path(args[0]);
-		Path out = new Path(args[1]);
-		FileInputFormat.setInputPaths(job, in);
-		FileOutputFormat.setOutputPath(job, out);
-		job.setJobName("HadoopPatents");
-		job.setMapperClass(MapClass.class);
-		job.setReducerClass(Reduce.class);
-		job.setInputFormat(KeyValueTextInputFormat.class);
-		job.setOutputFormat(TextOutputFormat.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
-		job.set("key.value.separator.in.input.line", ",");
-		JobClient.runJob(job);
-		return 0;
-	}
-	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new HadoopPatents(), args);
-		System.exit(res);
-	}
+package edu.cooper.ece460.patents;
+
+import java.io.*;
+import java.util.*;
+
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.conf.*;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.util.*;
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+public class HadoopPatents{
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+
+        Path inPath = new Path(args[0]);
+        Path outPath = new Path(args[1]);
+
+        Job job = new Job(conf, "HadoopPatents");
+
+        job.setJarByClass(HadoopPatents.class);
+        job.setMapperClass(PatentsMap.class);
+        // job.setPartitionerClass(PicasaPartition.class);
+        job.setReducerClass(PatentsReduce.class);
+
+        job.setNumReduceTasks(12);
+
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(Text.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
+
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
+
+        FileInputFormat.addInputPath(job, inPath);
+        FileOutputFormat.setOutputPath(job, outPath);
+
+        job.waitForCompletion(true);
+    }
 }
