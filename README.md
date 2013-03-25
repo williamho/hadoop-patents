@@ -17,11 +17,13 @@ Run the jar file with Hadoop. Program arguments:
 
 Example:
 
-	hadoop jar target/HadoopPatents-1.0.jar edu.cooper.ece460.patents.HadoopPatents patents_in patents_out
+	hadoop jar target/HadoopPatents-1.0.jar edu.cooper.ece460.patents.HadoopPatents patents_in patents_outcite patents_outcount
 
-	hadoop fs -getmerge patents_out outfile
+	hadoop fs -getmerge patents_outcite outcite
+	hadoop fs -getmerge patents_outcount outcount
 
 Note that the equalized images directory must not already exist. It can be removed using:
 
-	hadoop fs -rmr picasa_out 
+	hadoop fs -rmr picasa_out_citation
+	hadoop fs -rmr picasa_out_count
 

@@ -13,15 +13,15 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-
-public class PatentsMap extends Mapper<LongWritable, Text, Text, Text>{
+public class CitationCatReduce extends Reducer<Text, Text, Text, Text>{
     @Override
-    public void map(LongWritable key, Text value,
-                    Context context) throws IOException, InterruptedException{
-        String line = value.toString();
-        String[] lineParts = line.split(",");
-        String citingPatent = lineParts[0];
-        String citedPatent = lineParts[1];
-        context.write(new Text(citedPatent), new Text(citingPatent));
+    public void reduce(Text key, Iterable<Text> values,
+                       Context context) throws IOException, InterruptedException {
+        String csv = "";
+        for(Text value : values){
+            if (csv.length() > 0) csv += ",";
+            csv += value.toString();
+        }
+        context.write(key, new Text(csv));
     }
 }

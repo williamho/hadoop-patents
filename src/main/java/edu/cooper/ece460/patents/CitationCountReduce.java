@@ -13,15 +13,14 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class PatentsReduce extends Reducer<Text, Text, Text, Text>{
+public class CitationCountReduce extends Reducer<Text, Text, Text, IntWritable>{
     @Override
     public void reduce(Text key, Iterable<Text> values,
                        Context context) throws IOException, InterruptedException {
-        String csv = "";
+        int count = 0;
         for(Text value : values){
-            csv += value.toString();
-            csv += ",";
+            count++;
         }
-        context.write(key, new Text(csv));
+        context.write(key, new IntWritable(count));
     }
 }

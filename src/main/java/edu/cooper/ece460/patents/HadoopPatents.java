@@ -19,27 +19,41 @@ public class HadoopPatents{
 
         Path inPath = new Path(args[0]);
         Path outPath = new Path(args[1]);
+        Path outPath2 = new Path(args[2]);
 
-        Job job = new Job(conf, "HadoopPatents");
+        // citation inversion
+        Job job1 = new Job(conf, "HadoopPatents");
+        job1.setJarByClass(HadoopPatents.class);
+        job1.setMapperClass(CitationInversionMap.class);
+        // job1.setPartitionerClass(PicasaPartition.class);
+        job1.setReducerClass(CitationCatReduce.class);
+        job1.setNumReduceTasks(12);
+        job1.setMapOutputKeyClass(Text.class);
+        job1.setMapOutputValueClass(Text.class);
+        job1.setOutputKeyClass(Text.class);
+        job1.setOutputValueClass(Text.class);
+        job1.setInputFormatClass(TextInputFormat.class);
+        job1.setOutputFormatClass(TextOutputFormat.class);
+        FileInputFormat.addInputPath(job1, inPath);
+        FileOutputFormat.setOutputPath(job1, outPath);
+        job1.waitForCompletion(true);
 
-        job.setJarByClass(HadoopPatents.class);
-        job.setMapperClass(PatentsMap.class);
-        // job.setPartitionerClass(PicasaPartition.class);
-        job.setReducerClass(PatentsReduce.class);
+        // citation count
+        Job job2 = new Job(conf, "HadoopPatents");
+        job2.setJarByClass(HadoopPatents.class);
+        job2.setMapperClass(CitationInversionMap.class);
+        // job2.setPartitionerClass(PicasaPartition.class);
+        job2.setReducerClass(CitationCountReduce.class);
+        job2.setNumReduceTasks(12);
+        job2.setMapOutputKeyClass(Text.class);
+        job2.setMapOutputValueClass(Text.class);
+        job2.setOutputKeyClass(Text.class);
+        job2.setOutputValueClass(IntWritable.class);
+        job2.setInputFormatClass(TextInputFormat.class);
+        job2.setOutputFormatClass(TextOutputFormat.class);
+        FileInputFormat.addInputPath(job2, inPath);
+        FileOutputFormat.setOutputPath(job2, outPath2);
+        job2.waitForCompletion(true);
 
-        job.setNumReduceTasks(12);
-
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(Text.class);
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
-
-        job.setInputFormatClass(TextInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
-
-        FileInputFormat.addInputPath(job, inPath);
-        FileOutputFormat.setOutputPath(job, outPath);
-
-        job.waitForCompletion(true);
     }
 }
