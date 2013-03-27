@@ -20,6 +20,7 @@ public class HadoopPatents{
         Path inPath = new Path(args[0]);
         Path outPath = new Path(args[1]);
         Path outPath2 = new Path(args[2]);
+		Path outPath3 = new Path(args[3]);
 
         // citation inversion
         Job job1 = new Job(conf, "HadoopPatents");
@@ -54,6 +55,23 @@ public class HadoopPatents{
         FileInputFormat.addInputPath(job2, inPath);
         FileOutputFormat.setOutputPath(job2, outPath2);
         job2.waitForCompletion(true);
+		
+		// citation histogram
+		Job job3 = new Job(conf, "HadoopPatents");
+        job3.setJarByClass(HadoopPatents.class);
+        job3.setMapperClass(CitationHistMap.class);
+        // job3.setPartitionerClass(PicasaPartition.class);
+        job3.setReducerClass(CitationHistReduce.class);
+        job3.setNumReduceTasks(12);
+        job3.setMapOutputKeyClass(Text.class);
+        job3.setMapOutputValueClass(Text.class);
+        job3.setOutputKeyClass(Text.class);
+        job3.setOutputValueClass(IntWritable.class);
+        job3.setInputFormatClass(TextInputFormat.class);
+        job3.setOutputFormatClass(TextOutputFormat.class);
+        FileInputFormat.addInputPath(job3, inPath);
+        FileOutputFormat.setOutputPath(job3, outPath3);
+        job3.waitForCompletion(true);
 
     }
 }
