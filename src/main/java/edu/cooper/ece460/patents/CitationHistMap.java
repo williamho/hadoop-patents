@@ -17,13 +17,15 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class CitationHistMap extends Mapper<LongWritable, Text, IntWritable, IntWritable>{
 
 	int uno = 1;
-	private int citationCount;
+	private IntWritable citationCount = new IntWritable();
 	
 	//@Override
     public void map(LongWritable key, Text value,
                     Context context) throws IOException, InterruptedException {
-
-		citationCount = Integer.parseInt(value.toString());
-        context.write(new IntWritable(citationCount), new IntWritable(uno));
+		String line = value.toString();
+        String[] lineParts = line.split(",");
+        String citedPatent = lineParts[1];
+		citationCount.set(Integer.parseInt(citedPatent));
+        context.write(citationCount, new IntWritable(uno));
     }
 }

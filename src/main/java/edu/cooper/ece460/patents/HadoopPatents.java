@@ -22,7 +22,7 @@ public class HadoopPatents{
         Path outPath2 = new Path(args[2]);
 		Path outPath3 = new Path(args[3]);
 
-        // citation inversion
+        citation inversion
         Job job1 = new Job(conf, "HadoopPatents");
         job1.setJarByClass(HadoopPatents.class);
         job1.setMapperClass(CitationInversionMap.class);
@@ -63,9 +63,9 @@ public class HadoopPatents{
         // job3.setPartitionerClass(PicasaPartition.class);
         job3.setReducerClass(CitationHistReduce.class);
         job3.setNumReduceTasks(12);
-        job3.setMapOutputKeyClass(Text.class);
-        job3.setMapOutputValueClass(Text.class);
-        job3.setOutputKeyClass(Text.class);
+        job3.setMapOutputKeyClass(IntWritable.class);
+        job3.setMapOutputValueClass(IntWritable.class);
+        job3.setOutputKeyClass(IntWritable.class);
         job3.setOutputValueClass(IntWritable.class);
         job3.setInputFormatClass(TextInputFormat.class);
         job3.setOutputFormatClass(TextOutputFormat.class);

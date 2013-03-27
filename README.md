@@ -21,9 +21,11 @@ Example:
 
 	hadoop fs -getmerge patents_outcite outcite
 	hadoop fs -getmerge patents_outcount outcount
+	hadoop fs -getmerge patents_outhist outhist
 
 Note that the equalized images directory must not already exist. It can be removed using:
 
-	hadoop fs -rmr picasa_out_citation
-	hadoop fs -rmr picasa_out_count
+	hadoop fs -rmr patents_outcite
+	hadoop fs -rmr patents_outcount
+	hadoop fs -rmr patents_outhist
 

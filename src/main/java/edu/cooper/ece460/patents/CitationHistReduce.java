@@ -14,10 +14,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
-public class CitationHistReduce extends Reducer<Text, Text, Text, IntWritable>
+public class CitationHistReduce extends Reducer<Text, Text, IntWritable, IntWritable>
 {
 		//@Override
-   public void reduce(Text key, Iterable<IntWritable> values,
+   public void reduce(IntWritable key, Iterable<IntWritable> values,
                        Context context) throws IOException, InterruptedException {
 			int count = 0;
 			for(IntWritable value : values) {
