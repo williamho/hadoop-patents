@@ -2,6 +2,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<title>Patents</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
 <h1>
@@ -9,31 +10,31 @@ Patent Metadata Analysis with Hadoop
 </h1>
 
 <p>Run Hadoop program with arguments</p>
-<div style="width:300px;">
+<div style="width:400;">
 	<form method="post" name="HadoopPatents" id="HadoopPatents" action="hadoop">
 		<fieldset>
 			<legend>Input</legend>
 			<dl>
-				<label for="jar">Path to JAR file</label>
-				<input type="text" value="/path/to/jar" name="jar" class="required" id="jar" />
+				<label for="jar">JAR file (Local)</label>
+				<input type="text" value="target/HadoopPatents-1.0.jar" name="jar" class="required" id="jar" />
 			</dl>
 			<dl>
-				<label for="input">Input directory</label>
+				<label for="input">Input directory (HDFS)</label>
 				<input type="text" value="patents_in" name="input" class="required" id="input" />
 			</dl>
 		</fieldset>
 		<fieldset>
 			<legend>Outputs</legend>
 			<dl>
-					<label for="outcite">Citations</label>
+					<label for="outcite">Citations (Local)</label>
 					<input type="text" value="patents_outcite" name="outcite" class="required" id="outcite" />
 			</dl>
 			<dl>
-					<label for="outcount">Counts</label>
+					<label for="outcount">Counts (Local)</label>
 					<input type="text" value="patents_outcount" name="outcount" class="required" id="outcount" />
 			</dl>
 			<dl>
-					<label for="outhist">Histogram</label>
+					<label for="outhist">Histogram (Local)</label>
 					<input type="text" value="patents_outhist" name="outhist" class="required" id="outhist" />
 			</dl>
 		</fieldset>

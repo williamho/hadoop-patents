@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.Process;
 import java.lang.ProcessBuilder;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class RunHadoopServlet extends HttpServlet
 {
@@ -25,38 +27,50 @@ public class RunHadoopServlet extends HttpServlet
 	{
 		resp.setContentType("text/html");
 		resp.setStatus(HttpServletResponse.SC_OK);
+		final String outputDir = "output";
+		final String mainClass = "edu.cooper.ece460.patents.HadoopPatents";
+
 		String inputDir = req.getParameter("input");
 		String outputCite = req.getParameter("outcite");
 		String outputCount = req.getParameter("outcount");
 		String outputHist = req.getParameter("outhist");
-		String jar = req.getParameter("jar");
-		String mainClass = "edu.cooper.ece460.patents.HadoopPatents";
+		String jar = "target/HadoopPatents-1.0.jar"; // Should probably not be hardcoded
+
+		PrintWriter out = resp.getWriter();
+		if (inputDir == null || outputCite == null || outputCount == null || outputHist == null) {
+			out.println("Invalid parameters");
+			System.exit(-1);
+		}
+
+		// Remove existing output directories
+		new ProcessBuilder(
+			"hadoop", "fs", "-rmr",
+			outputCite, outputCount, outputHist
+		).start();
 
 		Process pb = new ProcessBuilder(
-			"hadoop",
-			"jar",
-			jar,
-			mainClass,
-			inputDir,
-			outputCite,
-			outputCount,
-			outputHist
+			"hadoop", "jar",
+			jar, mainClass, inputDir, outputCite, outputCount, outputHist
 		).start();
-		String hadoopOutput = convertStreamToString(pb.getInputStream());
-		String hadoopError = convertStreamToString(pb.getErrorStream());
-		
+
 		// Display output and error messages
-		PrintWriter out = resp.getWriter();
 		out.println("<div>");
-		out.println("<div style='float:left; width:50%;'>");
-		out.println("<h2>Output</h2><hr><tt>");
-		out.println(nl2br(hadoopOutput));
+		out.println("<tt>");
+		BufferedReader hadoopOut = new BufferedReader(new InputStreamReader(pb.getInputStream()));
+		BufferedReader hadoopError = new BufferedReader(new InputStreamReader(pb.getErrorStream()));
+
+		String line = null;
+		while((line = hadoopError.readLine()) != null) {
+		    out.println(line + "<br />");
+			out.flush();
+		}
+
 		out.println("</tt></div>");
-		out.println("<div style='float:right; width:50%;'>");
-		out.println("<h2>Errors</h2><hr><tt>");
-		out.println(nl2br(hadoopError));
-		out.println("</tt></div>");
-		out.println("</div>");
+
+		// Merge output directory files
+		new ProcessBuilder("hadoop", "fs", "-getmerge", outputCite, outputDir+"/"+outputCite).start();
+		new ProcessBuilder("hadoop", "fs", "-getmerge", outputCount, outputDir+"/"+outputCount).start();
+		new ProcessBuilder("hadoop", "fs", "-getmerge", outputHist, outputDir+"/"+outputHist).start();
 	}
 
 	public String nl2br(String s) {
