@@ -37,7 +37,7 @@ public class HadoopPatents{
         job1.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(job1, inPath);
         FileOutputFormat.setOutputPath(job1, outPath);
-        job1.waitForCompletion(true);
+		//job1.waitForCompletion(true);
 
         // citation count
         Job job2 = new Job(conf, "HadoopPatents");
@@ -69,7 +69,7 @@ public class HadoopPatents{
         job3.setOutputValueClass(IntWritable.class);
         job3.setInputFormatClass(TextInputFormat.class);
         job3.setOutputFormatClass(TextOutputFormat.class);
-        FileInputFormat.addInputPath(job3, inPath);
+        FileInputFormat.addInputPath(job3, outPath2);
         FileOutputFormat.setOutputPath(job3, outPath3);
         job3.waitForCompletion(true);
 

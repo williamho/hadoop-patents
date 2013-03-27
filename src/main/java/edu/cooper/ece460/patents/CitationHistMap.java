@@ -22,8 +22,9 @@ public class CitationHistMap extends Mapper<LongWritable, Text, IntWritable, Int
 	//@Override
     public void map(LongWritable key, Text value,
                     Context context) throws IOException, InterruptedException {
-		String line = value.toString();
-        String[] lineParts = line.split(",");
+		 String line = value.toString();
+        String[] lineParts = line.split("\t");
+        String citingPatent = lineParts[0];
         String citedPatent = lineParts[1];
 		citationCount.set(Integer.parseInt(citedPatent));
         context.write(citationCount, new IntWritable(uno));

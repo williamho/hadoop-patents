@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
-public class CitationHistReduce extends Reducer<Text, Text, IntWritable, IntWritable>
+public class CitationHistReduce extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable>
 {
 		//@Override
    public void reduce(IntWritable key, Iterable<IntWritable> values,
