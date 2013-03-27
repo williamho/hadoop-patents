@@ -22,7 +22,7 @@ public class HadoopPatents{
         Path outPath2 = new Path(args[2]);
 		Path outPath3 = new Path(args[3]);
 
-        citation inversion
+        // citation inversion
         Job job1 = new Job(conf, "HadoopPatents");
         job1.setJarByClass(HadoopPatents.class);
         job1.setMapperClass(CitationInversionMap.class);
