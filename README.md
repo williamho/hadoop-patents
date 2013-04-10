@@ -14,12 +14,12 @@ Patent Metadata Analysis with Hadoop
 
 Run the jar file with Hadoop. Program arguments:
 
-1. Path to the HDFS directory with *only* cite75_99.txt.
+1. Path to the HDFS directory with *only* `cite75_99.txt`.
 2. Path to the HDFS directory to save output files.
 
 Example:
 
-	hadoop jar target/HadoopPatents-1.0.jar edu.cooper.ece460.patents.HadoopPatents patents_in patents_outcite patents_outcount
+	hadoop jar target/HadoopPatents-1.0.jar edu.cooper.ece460.patents.HadoopPatents patents_in patents_outcite patents_outcount patents_outhist
 
 	hadoop fs -getmerge patents_outcite outcite
 	hadoop fs -getmerge patents_outcount outcount
@@ -32,16 +32,8 @@ Note that the output directories must not already exist. It can be removed using
 ###HTTP
 
 It is also possible to run the Hadoop program using a Jetty frontend interface:
-<<<<<<< HEAD
-
-	mvn jetty:run
-=======
-
 	mvn jetty:run
 
 View the page at `localhost:8080`. Output directories are automatically deleted 
 on HDFS if they exist. Output files are saved locally to the `output` directory.
->>>>>>> c07f5582d067c5fdfd1ad3bf94159c71baeaf6b3
 
-View the page at `localhost:8080`. Output directories are automatically deleted 
-on HDFS if they exist. Output files are saved locally to the `output` directory.
