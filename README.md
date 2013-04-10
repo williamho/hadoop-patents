@@ -32,6 +32,7 @@ Note that the output directories must not already exist. It can be removed using
 ###HTTP
 
 It is also possible to run the Hadoop program using a Jetty frontend interface:
+
 	mvn jetty:run
 
 View the page at `localhost:8080`. Output directories are automatically deleted 
